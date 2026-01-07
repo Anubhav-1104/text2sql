@@ -1,20 +1,17 @@
-# Base Python image
 FROM python:3.11-slim
 
-# Set working directory
 WORKDIR /app
+
+# Install system dependencies
+RUN pip install --no-cache-dir uv
 
 # Copy dependency files
 COPY pyproject.toml uv.lock ./
 
-# Install uv
-RUN pip install uv
+# Install Python dependencies
+RUN uv pip install --system -r pyproject.toml
 
-# Install dependencies
-RUN uv pip install --system --no-cache
-
-# Copy project files
+# Copy application code
 COPY . .
 
-# Default command
 CMD ["python", "main.py"]
